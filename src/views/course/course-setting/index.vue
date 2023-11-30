@@ -35,11 +35,11 @@ const loading = ref(false)
 
 const courseSetting = reactive({
   id: '',
-  dayOfPerWeek: 5,
-  sizeOfMorningEarly: 1,
-  sizeOfMorning: 4,
-  sizeOfAfternoon: 4,
-  sizeOfNight: 2
+  dayOfPerWeek: '',
+  sizeOfMorningEarly: '',
+  sizeOfMorning: '',
+  sizeOfAfternoon: '',
+  sizeOfNight: ''
 })
 
 function getCurrentSetting() {
