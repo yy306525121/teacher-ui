@@ -145,7 +145,7 @@
 </template>
 
 <script setup name="Post">
-import { page } from "@/api/course/teacher";
+import { page } from "@/api/subject/teacher";
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict("sys_normal_disable");

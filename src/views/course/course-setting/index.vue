@@ -27,7 +27,7 @@
 </template>
 
 <script setup name="CourseSetting">
-import { current, addCourseSetting, updateCourseSetting } from "@/api/course/course-setting";
+import { current, addCourseSetting, updateCourseSetting } from "@/api/course/subject-setting";
 
 const { proxy } = getCurrentInstance();
 
