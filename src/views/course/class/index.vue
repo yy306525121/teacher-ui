@@ -7,7 +7,7 @@
             plain
             icon="Plus"
             @click="handleAdd"
-            v-hasPermi="['course:grade:add']"
+            v-hasPermi="['course:class:add']"
         >新增</el-button>
       </el-col>
     </el-row>
@@ -22,25 +22,29 @@
     >
 
       <el-table-column prop="name" label="年级名称"></el-table-column>
+      <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dept:edit']">修改</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['course:class:edit']">修改</el-button>
           <el-button v-if="scope.row.parentId == 0" link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dept:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
+    <Form ref="formRef" @get-tree="getTree"/>
   </div>
 </template>
 
-<script setup name="Grade">
-import { tree } from "@/api/course/grade";
+<script setup name="ClassInfo">
+import { tree } from "@/api/course/class";
+import Form from './form.vue'
 
 const loading = ref(false)
-const isExpandAll = ref(true);
+const isExpandAll = ref(false);
 const refreshTable = ref(true);
 const gradeList = ref([])
+const formRef = ref(null)
 
 function getTree() {
   loading.value = true
@@ -51,11 +55,11 @@ function getTree() {
 }
 
 function handleAdd() {
-
+  formRef.value.show()
 }
 
 function handleUpdate(data) {
-
+  formRef.value.show(data)
 }
 
 function handleDelete(data) {
