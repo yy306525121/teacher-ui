@@ -1,5 +1,11 @@
 import request from '@/utils/request'
 
+export function getInfo(id) {
+    return request({
+        url: '/course/subject/' + id,
+        method: 'get'
+    })
+}
 export function page(data) {
     return request({
         url: '/course/subject/page',

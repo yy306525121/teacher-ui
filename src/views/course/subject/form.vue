@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" v-model="open" width="900px" append-to-body @closed="reset">
+  <el-dialog :title="title" v-model="open" width="700px" append-to-body @closed="reset">
     <el-form ref="subjectRef" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="科目名称" prop="name">
         <el-input v-model="form.name" placeholder="请输入科目名称"/>

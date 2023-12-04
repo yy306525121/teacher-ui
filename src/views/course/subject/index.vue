@@ -10,6 +10,10 @@
             @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -28,7 +32,7 @@
             icon="Edit"
             :disabled="single"
             @click="handleUpdate"
-            v-hasPermi="['system:post:edit']"
+            v-hasPermi="['system:subject:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -38,7 +42,7 @@
             icon="Delete"
             :disabled="multiple"
             @click="handleDelete"
-            v-hasPermi="['system:post:remove']"
+            v-hasPermi="['system:subject:remove']"
         >删除</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getPage"></right-toolbar>
@@ -67,8 +71,11 @@
 </template>
 
 <script setup name="Course">
-import { page, delSubject } from '@/api/course/subject'
+import { page, delSubject, getInfo } from '@/api/course/subject'
 import Form from './form.vue'
+import {getCurrentInstance} from "vue";
+
+const { proxy } = getCurrentInstance();
 
 const formRef = ref(null)
 
@@ -93,11 +100,20 @@ function handleQuery() {
   queryParams.value.pageNum = 1;
   getPage();
 }
+
+function resetQuery() {
+  proxy.resetForm("queryRef")
+  queryParams.value.name = undefined
+  handleQuery()
+}
 function handleAdd() {
   formRef.value.show()
 }
 function handleUpdate(row) {
-  formRef.value.show(row)
+  const subjectId = row.id || ids.value;
+  getInfo(subjectId).then(response => {
+    formRef.value.show(response.data)
+  })
 }
 function handleDelete(row) {
   const subjectIds = row.id || ids.value;
