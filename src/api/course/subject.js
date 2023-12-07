@@ -14,6 +14,14 @@ export function page(data) {
     })
 }
 
+export function list(data) {
+    return request({
+        url: '/course/subject/list',
+        method: 'post',
+        data: data
+    })
+}
+
 export function addSubject(data) {
     return request({
         url: '/course/subject/add',
