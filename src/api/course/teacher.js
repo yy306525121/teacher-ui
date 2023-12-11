@@ -27,7 +27,7 @@ export function updateTeacher(data) {
 
 export function getTeacherInfo(id) {
     return request({
-        url: '/course/teacher/' +id,
+        url: '/course/teacher/info/' +id,
         method: 'get'
     })
 }

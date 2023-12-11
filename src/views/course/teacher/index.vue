@@ -165,9 +165,7 @@ function handleAdd() {
 function handleUpdate(row) {
   const teacherId = row.id || ids.value;
   debugger
-  getTeacherInfo(teacherId).then(response => {
-    formRef.value.show(response.data)
-  });
+  formRef.value.show(teacherId)
 }
 /** 删除按钮操作 */
 function handleDelete(row) {

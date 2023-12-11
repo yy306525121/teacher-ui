@@ -1,5 +1,5 @@
 <script setup>
-import { addTeacher, updateTeacher } from "@/api/course/teacher";
+import { addTeacher, updateTeacher, getTeacherInfo } from "@/api/course/teacher";
 import { list as listSubject } from '@/api/course/subject'
 
 const { proxy } = getCurrentInstance();
@@ -19,15 +19,23 @@ const data = reactive({
 const { form, rules} = toRefs(data)
 
 
-function show(data) {
+function show(id) {
   getSubjectList()
-  if(data) {
+  if(id) {
+    getTeacherInfo(id).then(rsp => {
+      let data = rsp.data
+      let subjectIds = []
+      if (data.subjectList) {
+        subjectIds = data.subjectList.map(obj => {return obj.id})
+      }
+
+      form.value.id = data.id
+      form.value.name = data.name
+      form.value.status = data.status
+      form.value.basicSalary = data.basicSalary
+      form.value.subjectIds = subjectIds
+    })
     title.value = '修改'
-    form.value.id = data.id
-    form.value.name = data.name
-    form.value.status = data.status
-    form.value.basicSalary = data.basicSalary
-    form.value.subjectIds = data.subjectIds
     open.value = true
   } else {
     title.value = '新增'
