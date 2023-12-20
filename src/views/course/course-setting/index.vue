@@ -6,7 +6,7 @@
       </el-form-item>
 
       <el-form-item label="晨读课数(节)" prop="sizeOfMorningEarly">
-        <el-input-number v-model="courseSetting.sizeOfMorningEarly" :min="1" :max="2"/>
+        <el-input-number v-model="courseSetting.sizeOfMorningEarly" :min="0" :max="2"/>
       </el-form-item>
 
       <el-form-item label="上午课数(节)" prop="sizeOfMorning">
@@ -18,28 +18,27 @@
       </el-form-item>
 
       <el-form-item label="晚自习课数(节)" prop="sizeOfNight">
-        <el-input-number v-model="courseSetting.sizeOfNight" :min="1" :max="7"/>
+        <el-input-number v-model="courseSetting.sizeOfNight" :min="0" :max="7"/>
       </el-form-item>
     </el-form>
-
       <el-button type="primary" @click="handleSaveOrUpdate">保 存</el-button>
   </div>
 </template>
 
 <script setup name="CourseSetting">
-import { current, addCourseSetting, updateCourseSetting } from "@/api/course/subject-setting";
+import { current, addCourseSetting, updateCourseSetting } from "@/api/course/course-setting";
 
 const { proxy } = getCurrentInstance();
 
 const loading = ref(false)
 
 const courseSetting = reactive({
-  id: '',
-  dayOfPerWeek: '',
-  sizeOfMorningEarly: '',
-  sizeOfMorning: '',
-  sizeOfAfternoon: '',
-  sizeOfNight: ''
+  id: undefined,
+  dayOfPerWeek: undefined,
+  sizeOfMorningEarly: undefined,
+  sizeOfMorning: undefined,
+  sizeOfAfternoon: undefined,
+  sizeOfNight: undefined
 })
 
 function getCurrentSetting() {

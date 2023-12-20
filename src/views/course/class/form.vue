@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" v-model="open" width="600px" append-to-body v-loading="loading" @closed="reset">
+  <el-dialog :title="title" v-model="open" width="600px" append-to-body @closed="reset">
     <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="上级部门" prop="parentId">
         <el-select v-model="form.parentId" placeholder="请选择年级">
@@ -33,7 +33,6 @@ const emit = defineEmits([ "get-tree" ]);
 
 const title = ref("");
 const open = ref(false);
-const loading = ref(false)
 // 年级列表
 const gradeList = ref([])
 
@@ -103,12 +102,10 @@ function submitForm() {
 }
 
 function getGradeList() {
-  loading.value = true
   let params = { 'parentId': 0 }
   getList(params).then(response => {
     gradeList.value = response.data
   }).finally(() => {
-    loading.value = false
   })
 }
 

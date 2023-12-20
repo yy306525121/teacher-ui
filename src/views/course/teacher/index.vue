@@ -164,7 +164,6 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   const teacherId = row.id || ids.value;
-  debugger
   formRef.value.show(teacherId)
 }
 /** 删除按钮操作 */
