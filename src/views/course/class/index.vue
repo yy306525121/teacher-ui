@@ -26,8 +26,8 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['course:class:edit']">修改</el-button>
-          <el-button v-if="scope.row.parentId == 0" link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dept:remove']">删除</el-button>
+          <el-button v-if="scope.row.parentId == 0" link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['course:class:add']">新增</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['course:class:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,8 +54,12 @@ function getTree() {
   })
 }
 
-function handleAdd() {
-  formRef.value.show()
+function handleAdd(data) {
+  let parentId = undefined
+  if (data) {
+    parentId = data.id
+  }
+  formRef.value.show(undefined, parentId)
 }
 
 function handleUpdate(data) {

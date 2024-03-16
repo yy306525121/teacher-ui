@@ -18,7 +18,8 @@ import { reactive } from "vue";
 const calendarOptions = reactive({
   plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin],
   locale: 'zh',
-  initialView: 'timeGridWeek',
+  // initialView: 'timeGridWeek',
+  initialView: 'dayGridMonth',
 })
 </script>
 

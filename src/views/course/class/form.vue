@@ -47,7 +47,7 @@ const data = reactive({
 const { form, rules } = toRefs(data);
 
 
-function show(data) {
+function show(data, parentId) {
   getGradeList()
 
   if (data) {
@@ -57,11 +57,12 @@ function show(data) {
       name: data.name,
       sort: data.sort
     }
-    if (data.parentId != 0) {
+    if (data.parentId !== 0) {
       form.value.parentId = data.parentId
     }
   } else {
     title.value = '新增'
+    form.value.parentId = parentId
   }
 
   open.value = true
