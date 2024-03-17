@@ -9,6 +9,13 @@ export function page(data) {
     })
 }
 
+export function list() {
+    return request({
+        url: '/course/teacher/list',
+        method: 'post'
+    })
+}
+
 export function addTeacher(data) {
     return request({
         url: '/course/teacher/add',

@@ -1,6 +1,7 @@
 <script setup name="CoursePlan">
 import {list as listCoursePlan} from '@/api/course/plan'
 import {list as listTimeSlot} from '@/api/course/timeSlot'
+import {list as listTeacher} from '@/api/course/teacher'
 import {tree} from "@/api/course/class";
 import PlanImport from './import.vue'
 
@@ -11,23 +12,12 @@ const importRef = ref(null)
 
 const loading = ref(false)
 
-const timeSlotList = ref([])
 const gradeList = ref([])
+const teacherList = ref([])
 const showSearch = ref(true);
-const coursePlanList = ref([
-  {duration: '早自习', sort: 1, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '上午', sort: 2, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '上午', sort: 3, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '上午', sort: 4, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '上午', sort: 5, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '上午', sort: 6, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '下午', sort: 7, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '下午', sort: 8, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '下午', sort: 9, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '下午', sort: 10, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '夜自习', sort: 11, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
-  {duration: '夜自习', sort: 12, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''}
-])
+
+
+const coursePlanList = ref([])
 const props = {
   label: 'name',
   value: 'id',
@@ -80,15 +70,15 @@ function objectSpanMethod({
   }
 }
 
-function getTree() {
+function getGradeTree() {
   tree().then(response => {
     gradeList.value = response.data
   })
 }
 
-function getTimeSlotList() {
-  listTimeSlot().then(rsp => {
-    timeSlotList.value = rsp.data
+function getAllTeacher() {
+  listTeacher().then(rsp => {
+    teacherList.value = rsp.data
   })
 }
 
@@ -119,6 +109,23 @@ function getList() {
   })
 }
 
+function resetCoursePlanList() {
+  coursePlanList.value = [
+    {duration: '早自习', sort: 1, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '上午', sort: 2, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '上午', sort: 3, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '上午', sort: 4, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '上午', sort: 5, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '上午', sort: 6, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '下午', sort: 7, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '下午', sort: 8, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '下午', sort: 9, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '下午', sort: 10, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '夜自习', sort: 11, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''},
+    {duration: '夜自习', sort: 12, monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', weekday: ''}
+  ]
+}
+
 function getCourseStr(item) {
   if (item.courseType.type === 1) {
     // 正常课时
@@ -132,6 +139,7 @@ function getCourseStr(item) {
 }
 
 function handleQuery() {
+  resetCoursePlanList()
   getList()
 }
 
@@ -144,8 +152,9 @@ function resetQuery() {
   handleQuery();
 }
 
-getTree()
-getTimeSlotList()
+getGradeTree()
+getAllTeacher()
+resetCoursePlanList()
 </script>
 
 <template>
@@ -161,9 +170,14 @@ getTimeSlotList()
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="年级" prop="classInfoId">
+      <el-form-item label="年级" prop="classInfoId" v-if="queryParams.queryType === '1'">
         <el-tree-select v-model="queryParams.classInfoId" :data="gradeList" :props="props"
-                        :render-after-expand="false"/>
+                        :render-after-expand="false" default-expand-all/>
+      </el-form-item>
+      <el-form-item label="教师" prop="teacherId" v-if="queryParams.queryType === '2'">
+        <el-select v-model="queryParams.teacherId" placeholder="请选择" clearable style="width: 200px">
+          <el-option v-for="item in teacherList" :key="item.id" :label="item.name" :value="item.id"/>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>

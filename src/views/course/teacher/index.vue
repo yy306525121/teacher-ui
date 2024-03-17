@@ -11,9 +11,9 @@
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="在职状态" clearable style="width: 200px">
+        <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 200px">
           <el-option
-              v-for="dict in job_status"
+              v-for="dict in sys_normal_disable"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
@@ -74,7 +74,7 @@
       <el-table-column label="基本工资" align="center" prop="basicSalary" />
       <el-table-column label="状态" align="center" prop="status">
         <template #default="scope">
-          <dict-tag :options="job_status" :value="scope.row.status" />
+          <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -107,7 +107,7 @@ import { page, delTeacher, getTeacherInfo } from "@/api/course/teacher";
 import Form from './form.vue'
 
 const { proxy } = getCurrentInstance();
-const { job_status } = proxy.useDict("job_status");
+const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
 
 const formRef = ref(null)
 const teacherList = ref([]);
@@ -159,7 +159,6 @@ function handleSelectionChange(selection) {
 }
 /** 新增按钮操作 */
 function handleAdd() {
-
   formRef.value.show()
 }
 /** 修改按钮操作 */

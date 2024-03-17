@@ -6,11 +6,13 @@ const { proxy } = getCurrentInstance();
 const title = ref('')
 const open = ref(false)
 const emit = defineEmits(["ok"]);
-const { job_status } = proxy.useDict("job_status");
+const { sys_normal_disable } = proxy.useDict("sys_normal_disable");
 const subjectList = ref([])
 
 const data = reactive({
-  form: {},
+  form: {
+    status: '0'
+  },
   rules: {
     name: [{ required: true, message: "科目名称不能为空", trigger: "blur" }],
     sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }]
@@ -79,8 +81,8 @@ function reset() {
   form.value = {
     id: undefined,
     name: undefined,
-    status: undefined,
-    basicSalary: 0,
+    status: 0,
+    basicSalary: undefined,
     subjectIds: []
   }
   proxy.resetForm('teacherRef')
@@ -113,10 +115,10 @@ defineExpose({
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="在职状态" prop="status">
+      <el-form-item label="状态" prop="status">
         <el-radio-group v-model="form.status">
           <el-radio
-              v-for="dict in job_status"
+              v-for="dict in sys_normal_disable"
               :key="dict.value"
               :label="dict.value"
           >{{ dict.label }}</el-radio>
