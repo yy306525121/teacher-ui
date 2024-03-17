@@ -20,12 +20,23 @@
         <el-button
             type="primary"
             plain
+            icon="Checked"
+            @click="toAddRule"
+            v-hasPermi="['course:fee:calculate']"
+        >添加课时规则</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
             icon="Cpu"
             @click="handleCalculate"
             v-hasPermi="['course:fee:calculate']"
         >计算课时</el-button>
       </el-col>
     </el-row>
+
+    <calculate-form ref="calculateFormRef" @ok="getPage"/>
 
     <el-table v-loading="loading" :data="lessonFeeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -50,11 +61,14 @@
 </template>
 
 
-<script setup name="LessonFee">
-import { page, calculate } from '@/api/course/fee'
+<script setup name="CourseFee">
+import { page } from '@/api/course/fee'
 import Detail from './detail.vue'
+import CalculateForm from './calculateForm.vue'
+const router = useRouter();
 const { proxy } = getCurrentInstance();
 
+const calculateFormRef = ref(null)
 const showSearch = ref(true);
 const loading = ref(false)
 const calculateLoading = ref(false)
@@ -96,7 +110,10 @@ function handleQuery() {
       getPage()
     }
   })
+}
 
+function toAddRule() {
+  router.push({name: 'CourseFeeRuleIndex'})
 }
 
 function resetQuery() {}
@@ -107,16 +124,17 @@ function handleDetail(data) {
 }
 
 function handleCalculate() {
-  let showDate = queryParams.value.date
-  showDate = showDate.substring(0, 7)
-  proxy.$modal.confirm('确认重新计算"' + showDate + '"的课时吗?').then(() => {
-    calculateLoading.value = true
-    calculate(queryParams.value).then(response => {
-      proxy.$modal.msg('计算完成')
-    }).finally(() => {
-      calculateLoading.value = false
-    })
-  })
+  calculateFormRef.value.show()
+  // let showDate = queryParams.value.date
+  // showDate = showDate.substring(0, 7)
+  // proxy.$modal.confirm('确认重新计算"' + showDate + '"的课时吗?').then(() => {
+  //   calculateLoading.value = true
+  //   calculate(queryParams.value).then(response => {
+  //     proxy.$modal.msg('计算完成')
+  //   }).finally(() => {
+  //     calculateLoading.value = false
+  //   })
+  // })
 }
 
 function handleSelectionChange(selection) {
