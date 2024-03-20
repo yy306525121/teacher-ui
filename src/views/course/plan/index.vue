@@ -1,8 +1,7 @@
 <script setup name="CoursePlan">
-import {list as listCoursePlan} from '@/api/course/plan'
-import {list as listTimeSlot} from '@/api/course/timeSlot'
-import {list as listTeacher} from '@/api/course/teacher'
-import {tree} from "@/api/course/class";
+import { list as listCoursePlan } from '@/api/course/plan'
+import { list as listTeacher } from '@/api/course/teacher'
+import { tree } from "@/api/course/class";
 import PlanImport from './import.vue'
 
 const {proxy} = getCurrentInstance();

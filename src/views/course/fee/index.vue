@@ -113,10 +113,12 @@ function handleQuery() {
 }
 
 function toAddRule() {
-  router.push({name: 'CourseFeeRuleIndex'})
+  router.push('/fee-rule')
 }
 
-function resetQuery() {}
+function resetQuery() {
+  queryParams.value.date = ''
+}
 
 function handleDetail(data) {
   // detailRef.value.show(data.teacherId)
