@@ -9,10 +9,32 @@ export function add(data) {
     })
 }
 
+export function edit(data) {
+    return request({
+        url: '/course/feeRule',
+        method: 'put',
+        data: data
+    })
+}
+
 export function listFeeRule(data) {
     return request({
         url: '/course/feeRule/page',
         method: 'get',
         params: data
+    })
+}
+
+export function getFeeRule(id) {
+    return request({
+        url: '/course/feeRule/' + id,
+        method: 'get'
+    })
+}
+
+export function delFeeRule(id) {
+    return request({
+        url: '/course/feeRule/' + userId,
+        method: 'delete'
     })
 }

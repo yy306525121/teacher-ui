@@ -21,8 +21,19 @@
             type="primary"
             plain
             icon="Plus"
+            v-hasPermi="['course:feeRule:add']"
             @click="handleAdd"
         >添加规则</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="danger"
+            plain
+            icon="Delete"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['course:feeRule:remove']"
+        >删除</el-button>
       </el-col>
     </el-row>
     <Form ref="formRef" @ok="getPage"/>
@@ -42,8 +53,8 @@
 
       <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:post:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:post:remove']">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['course:feeRule:edit']">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['course:feeRule:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +63,7 @@
         :total="total"
         v-model:page="queryParams.pageNum"
         v-model:limit="queryParams.pageSize"
-        @pagination="getList"
+        @pagination="getPage"
     />
   </div>
 
@@ -61,7 +72,7 @@
 
 <script setup name="FeeRuleIndex">
 import Form from './form.vue'
-import { listFeeRule } from '@/api/course/fee-rule'
+import { listFeeRule, delFeeRule } from '@/api/course/fee-rule'
 
 const { proxy } = getCurrentInstance();
 const { fee_rule_type } = proxy.useDict("fee_rule_type");
@@ -97,11 +108,19 @@ function handleQuery() {
   })
 }
 
-function handleUpdate() {
-
+function handleUpdate(data) {
+  formRef.value.show(data.id)
 }
 
-function handleDelete() {}
+function handleDelete(row) {
+  const feeRuleIds = row.userId || ids.value;
+  proxy.$modal.confirm('确定删除吗？').then(() => {
+    return delFeeRule(feeRuleIds)
+  }).then(() => {
+    getPage()
+    proxy.$modal.msgSuccess('删除成功')
+  }).catch(() => {})
+}
 
 function handleAdd() {
   formRef.value.show()
@@ -124,6 +143,7 @@ function handleSelectionChange(selection) {
 
 function resetQuery() {
   queryParams.value.date = ''
+  getPage()
 }
 
 getPage()

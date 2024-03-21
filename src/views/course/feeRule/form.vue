@@ -96,7 +96,7 @@
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="submitForm" :loading="loading">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </template>
@@ -106,7 +106,7 @@
 <script setup>
 import {getList} from "@/api/course/class";
 import {list as listTimeSlot} from '@/api/course/timeSlot'
-import { add as feeRuleAdd } from '@/api/course/fee-rule'
+import { add as feeRuleAdd, getFeeRule, edit as feeRuleEdit } from '@/api/course/fee-rule'
 
 const { proxy } = getCurrentInstance();
 const emit = defineEmits(["ok"]);
@@ -114,11 +114,13 @@ const { fee_rule_type } = proxy.useDict("fee_rule_type");
 
 const  title = ref('添加规则')
 const open = ref(false)
+const loading = ref(false)
 const gradeList = ref([])
 const timeSlotList = ref([])
 
 const data = reactive({
   form: {
+    id: '',
     type: '',
     classInfoId: '',
     classInfoIds: '',
@@ -136,6 +138,15 @@ const { form, rules} = toRefs(data)
 function show(id) {
   if (id) {
     title.value = '修改规则'
+    getFeeRule(id).then(rsp => {
+      form.value.id = rsp.data.id
+      form.value.type = rsp.data.type + ''
+      form.value.classInfoIds = JSON.parse(rsp.data.classInfoId)
+      form.value.startDate = rsp.data.startDate
+      form.value.startTimeSlotId = rsp.data.startTimeSlotId
+      form.value.endDate = rsp.data.endDate
+      form.value.endTimeSlotId = rsp.data.endTimeSlotId
+    })
   } else {
     title.value = '新增规则'
   }
@@ -160,13 +171,21 @@ function getTimeSlotList() {
 function submitForm() {
   proxy.$refs['feeRuleRef'].validate(valid => {
     if (valid) {
+      loading.value = true
       form.value.classInfoId = JSON.stringify(form.value.classInfoIds)
       if (form.value.id !== undefined) {
         // 修改
+        feeRuleEdit(form.value).then(() => {
+          proxy.$modal.msgSuccess("修改成功");
+          open.value = false;
+          loading.value = false
+          emit('ok')
+        })
       } else {
-        feeRuleAdd(form.value).then(rsp => {
+        feeRuleAdd(form.value).then(() => {
           proxy.$modal.msgSuccess("新增成功");
           open.value = false;
+          loading.value = false
           emit('ok')
         })
       }
@@ -181,6 +200,7 @@ function cancel() {
 
 function reset() {
   form.value = {
+    id: '',
     type: '',
     classInfoId: '',
     classInfoIds: '',
