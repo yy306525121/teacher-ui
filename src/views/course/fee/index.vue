@@ -34,6 +34,15 @@
             v-hasPermi="['course:fee:calculate']"
         >计算课时</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
+            icon="Download"
+            @click="handleExport"
+            v-hasPermi="['course:fee:export']"
+        >导出</el-button>
+      </el-col>
     </el-row>
 
     <calculate-form ref="calculateFormRef" @ok="getPage"/>
@@ -143,6 +152,13 @@ function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.id);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+/** 导出按钮操作 */
+function handleExport() {
+  proxy.download("/course/fee/export", {
+    ...queryParams.value
+  }, `课时费_${new Date().getTime()}.xlsx`);
 }
 </script>
 
