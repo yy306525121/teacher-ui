@@ -148,7 +148,7 @@ function handleImport() {
 
 function resetQuery() {
   proxy.resetForm("queryRef");
-  handleQuery();
+  resetCoursePlanList()
 }
 
 getGradeTree()

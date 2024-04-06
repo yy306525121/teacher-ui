@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+import { calculate } from '@/api/course/fee'
 const emit = defineEmits(["ok"]);
 
 const title = ref('课时计算')
@@ -36,12 +37,11 @@ function show() {
   open.value = true
 }
 
-function handleAdd() {
-
-}
-
 function submitForm() {
   isSubmiting.value = true
+  calculate(calculateForm.value).then(rsp => {
+
+  })
 }
 
 function cancel() {

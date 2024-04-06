@@ -171,9 +171,10 @@ function getTimeSlotList() {
 function submitForm() {
   proxy.$refs['feeRuleRef'].validate(valid => {
     if (valid) {
+      debugger
       loading.value = true
       form.value.classInfoId = JSON.stringify(form.value.classInfoIds)
-      if (form.value.id !== undefined) {
+      if (form.value.id) {
         // 修改
         feeRuleEdit(form.value).then(() => {
           proxy.$modal.msgSuccess("修改成功");
