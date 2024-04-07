@@ -156,9 +156,14 @@ function handleSelectionChange(selection) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download("/course/fee/export", {
-    ...queryParams.value
-  }, `课时费_${new Date().getTime()}.xlsx`);
+  proxy.$refs['queryRef'].validate(valid => {
+    if (valid) {
+      proxy.download("/course/fee/export", {
+        ...queryParams.value
+      }, `课时费_${new Date().getTime()}.xlsx`);
+    }
+  })
+
 }
 </script>
 
