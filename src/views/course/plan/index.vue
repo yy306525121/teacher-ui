@@ -174,7 +174,7 @@ resetCoursePlanList()
                         :render-after-expand="false" default-expand-all/>
       </el-form-item>
       <el-form-item label="教师" prop="teacherId" v-if="queryParams.queryType === '2'">
-        <el-select v-model="queryParams.teacherId" placeholder="请选择" clearable style="width: 200px">
+        <el-select v-model="queryParams.teacherId" placeholder="请选择" clearable style="width: 200px" filterable>
           <el-option v-for="item in teacherList" :key="item.id" :label="item.name" :value="item.id"/>
         </el-select>
       </el-form-item>

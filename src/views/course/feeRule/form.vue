@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="title" v-model="open" width="500px" append-to-body @closed="reset">
-    <el-form ref="feeRuleRef" :model="form" :rules="rules" label-width="80px">
+  <el-dialog :title="title" v-model="open" width="700px" append-to-body @closed="reset">
+    <el-form ref="feeRuleRef" :model="form" :rules="rules" label-width="120px">
       <el-form-item label="规则类型" prop="type">
         <el-select v-model="form.type" placeholder="请选择" clearable style="width: 300px">
           <el-option
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="班级" prop="classInfoIds">
+      <el-form-item label="班级" prop="classInfoIds" v-if="form.type === '1' || form.type === '2'">
         <el-select v-model="form.classInfoIds" multiple placeholder="请选择" clearable style="width: 300px">
           <el-option
               v-for="item in gradeList"
@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="开始日期" prop="startDate">
+      <el-form-item label="开始日期" prop="startDate" v-if="form.type === '1' || form.type === '2'">
         <el-date-picker
             v-model="form.startDate"
             type="date"
@@ -33,7 +33,7 @@
         />
       </el-form-item>
 
-      <el-form-item label="开始节次" prop="startTimeSlotId">
+      <el-form-item label="开始节次" prop="startTimeSlotId" v-if="form.type === '1' || form.type === '2'">
         <el-select v-model="form.startTimeSlotId" placeholder="请选择" clearable style="width: 300px">
           <el-option
               v-for="item in timeSlotList"
@@ -58,17 +58,17 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="结束日期" prop="endDate">
+      <el-form-item label="结束日期" prop="endDate" v-if="form.type === '1' || form.type === '2'">
         <el-date-picker
             v-model="form.endDate"
             type="date"
-            placeholder="请选择课时月份"
+            placeholder="请选择课时日期"
             value-format="YYYY-MM-DD"
             style="width: 300px"
         />
       </el-form-item>
 
-      <el-form-item label="开始节次" prop="endTimeSlotId">
+      <el-form-item label="开始节次" prop="endTimeSlotId" v-if="form.type === '1' || form.type === '2'">
         <el-select v-model="form.endTimeSlotId" placeholder="请选择" clearable style="width: 300px">
           <el-option
               v-for="item in timeSlotList"
@@ -92,6 +92,99 @@
           </el-option>
         </el-select>
       </el-form-item>
+
+      <el-row v-if="form.type === '3'">
+        <el-col :span="24">
+          <el-form-item label="调课日期">
+            <el-date-picker
+                v-model="form.overrideDate"
+                type="date"
+                placeholder="请选择课时日期"
+                value-format="YYYY-MM-DD"
+                style="width: 300px"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row v-if="form.type === '3'">
+        <el-col :span="24">
+          <el-form-item label="调课节次">
+            <el-select v-model="form.overrideTimeSlotId" placeholder="请选择" clearable style="width: 300px">
+              <el-option
+                  v-for="item in timeSlotList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.id"
+              >
+                <span style="float: left">{{ item.label }}</span>
+                <span
+                    style="
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                    "
+                >
+              <span v-if="item.sortInDay === 1">早自习</span>
+              <span v-if="item.sortInDay >= 2 && item.sortInDay <= 6">上午</span>
+              <span v-if="item.sortInDay >= 7 && item.sortInDay <= 10">下午</span>
+              <span v-if="item.sortInDay >= 11">夜自习</span>
+            </span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row v-if="form.type === '3'">
+        <el-col :span="12">
+          <el-form-item label="调课教师">
+            <el-select v-model="form.overrideFromTeacherId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in teacherList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="=>">
+            <el-select v-model="form.overrideToTeacherId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in teacherList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row v-if="form.type === '3'">
+        <el-col :span="12">
+          <el-form-item label="调课课程">
+            <el-select v-model="form.overrideFromSubjectId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in subjectList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="=>">
+            <el-select v-model="form.overrideToSubjectId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in subjectList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row v-if="form.type === '3'">
+        <el-col :span="12">
+          <el-form-item label="调课课程类型">
+            <el-select v-model="form.overrideFromCourseTypeId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in courseTypeList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="=>">
+            <el-select v-model="form.overrideToCourseTypeId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in courseTypeList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
     <template #footer>
@@ -106,6 +199,9 @@
 <script setup>
 import {getList} from "@/api/course/class";
 import {list as listTimeSlot} from '@/api/course/timeSlot'
+import { list as listTeacher } from '@/api/course/teacher'
+import { list as listSubject } from '@/api/course/subject'
+import { list as listCourseType } from '@/api/course/course-type'
 import { add as feeRuleAdd, getFeeRule, edit as feeRuleEdit } from '@/api/course/fee-rule'
 
 const { proxy } = getCurrentInstance();
@@ -117,6 +213,9 @@ const open = ref(false)
 const loading = ref(false)
 const gradeList = ref([])
 const timeSlotList = ref([])
+const teacherList = ref([])
+const subjectList = ref([])
+const courseTypeList = ref([])
 
 const data = reactive({
   form: {
@@ -127,7 +226,15 @@ const data = reactive({
     startDate: '',
     startTimeSlotId: '',
     endDate: '',
-    endTimeSlotId: ''
+    endTimeSlotId: '',
+    overrideDate: undefined,
+    overrideTimeSlotId: undefined,
+    overrideFromTeacherId: undefined,
+    overrideToTeacherId: undefined,
+    overrideFromSubjectId: undefined,
+    overrideToSubjectId: undefined,
+    overrideFromCourseTypeId: undefined,
+    overrideToCourseTypeId: undefined
   },
   rules: {
     type: [{ required: true, message: "规则类型", trigger: "blur" }]
@@ -146,6 +253,14 @@ function show(id) {
       form.value.startTimeSlotId = rsp.data.startTimeSlotId
       form.value.endDate = rsp.data.endDate
       form.value.endTimeSlotId = rsp.data.endTimeSlotId
+      form.value.overrideDate = rsp.data.overrideDate
+      form.value.overrideTimeSlotId = rsp.data.overrideTimeSlotId
+      form.value.overrideFromTeacherId = rsp.data.overrideFromTeacherId
+      form.value.overrideToTeacherId = rsp.data.overrideToTeacherId
+      form.value.overrideFromSubjectId = rsp.data.overrideFromSubjectId
+      form.value.overrideToSubjectId = rsp.data.overrideToSubjectId
+      form.value.overrideFromCourseTypeId = rsp.data.overrideFromCourseTypeId
+      form.value.overrideToCourseTypeId = rsp.data.overrideToCourseTypeId
     })
   } else {
     title.value = '新增规则'
@@ -165,6 +280,24 @@ function getTimeSlotList() {
     timeSlotList.value.forEach(function(item) {
       item.label = '第' + item.sortInDay + '节'
     })
+  })
+}
+
+function getAllTeacher() {
+  listTeacher().then(rsp => {
+    teacherList.value = rsp.data
+  })
+}
+
+function getAllSubject() {
+  listSubject({}).then(rsp => {
+    subjectList.value = rsp.data
+  })
+}
+
+function getAllCourseType() {
+  listCourseType().then(rsp => {
+    courseTypeList.value = rsp.data
   })
 }
 
@@ -208,13 +341,24 @@ function reset() {
     startDate: '',
     startTimeSlotId: '',
     endDate: '',
-    endTimeSlotId: ''
+    endTimeSlotId: '',
+    overrideDate: undefined,
+    overrideTimeSlotId: undefined,
+    overrideFromTeacherId: undefined,
+    overrideToTeacherId: undefined,
+    overrideFromSubjectId: undefined,
+    overrideToSubjectId: undefined,
+    overrideFromCourseTypeId: undefined,
+    overrideToCourseTypeId: undefined
   }
   proxy.resetForm('feeRuleRef')
 }
 
 getGradeList()
 getTimeSlotList()
+getAllTeacher()
+getAllSubject()
+getAllCourseType()
 defineExpose({
   show
 })
