@@ -8,3 +8,11 @@ export function list(data) {
     })
 }
 
+export function change(data) {
+    return request({
+        url: '/course/plan/change',
+        method: 'post',
+        data: data
+    })
+}
+

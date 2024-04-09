@@ -3,11 +3,13 @@ import { list as listCoursePlan } from '@/api/course/plan'
 import { list as listTeacher } from '@/api/course/teacher'
 import { tree } from "@/api/course/class";
 import PlanImport from './import.vue'
+import ChangePlan from './form.vue'
 
 const {proxy} = getCurrentInstance();
 const {plan_query_type} = proxy.useDict("plan_query_type");
 
 const importRef = ref(null)
+const changePlanRef = ref(null)
 
 const loading = ref(false)
 
@@ -146,6 +148,10 @@ function handleImport() {
   importRef.value.show()
 }
 
+function handleChange() {
+  changePlanRef.value.show()
+}
+
 function resetQuery() {
   proxy.resetForm("queryRef");
   resetCoursePlanList()
@@ -195,9 +201,20 @@ resetCoursePlanList()
         >导入
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="info"
+            plain
+            icon="Switch"
+            @click="handleChange"
+            v-hasPermi="['course:coursePlan:change']"
+        >更换教师
+        </el-button>
+      </el-col>
     </el-row>
 
     <plan-import ref="importRef" @ok="getList"/>
+    <change-plan ref="changePlanRef" @ok="getList"/>
 
     <el-table v-loading="loading" :span-method="objectSpanMethod" :data="coursePlanList" :border="true">
       <el-table-column label="时间" align="center" prop="duration"/>
