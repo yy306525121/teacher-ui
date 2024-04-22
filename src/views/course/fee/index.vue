@@ -122,7 +122,7 @@ function handleQuery() {
 }
 
 function toAddRule() {
-  router.push('/fee-rule')
+  router.push('/rule')
 }
 
 function resetQuery() {
