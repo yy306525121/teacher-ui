@@ -1,5 +1,5 @@
 <template>
-  <el-table v-loading="loading" :data="holidayRuleList" @selection-change="handleSelectionChange">
+  <el-table v-loading="loading" :data="ruleList" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="班级" align="center">
       <template #default="scope">
@@ -40,8 +40,8 @@
   />
 </template>
 
-<script setup name="HolidayRuleList">
-import { page, delHolidayRule } from '@/api/course/holiday-rule'
+<script setup name="TransferRuleList">
+import { page, del } from '@/api/course/transfer-rule'
 import { parseTime } from '@/utils/ruoyi'
 
 const { proxy } = getCurrentInstance();
@@ -63,7 +63,7 @@ const total = ref(0);
 const showSearch = ref(true);
 
 const loading = ref(true);
-const holidayRuleList = ref([]);
+const ruleList = ref([]);
 const searchDate = toRefs(props).searchDate
 
 
@@ -91,7 +91,7 @@ function handleSelectionChange(selection) {
 function getPage() {
   loading.value = true;
   page(queryParams.value).then(response => {
-    holidayRuleList.value = response.data.records;
+    ruleList.value = response.data.records;
     total.value = response.data.total;
     loading.value = false;
   });
@@ -105,7 +105,7 @@ function handleDelete(row) {
   const ids = row.id || ids.value;
   debugger
   proxy.$modal.confirm('确定删除吗？').then(() => {
-    return delHolidayRule(ids)
+    return del(ids)
   }).then(() => {
     getPage()
     proxy.$modal.msgSuccess('删除成功')

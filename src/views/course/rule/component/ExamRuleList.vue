@@ -40,7 +40,7 @@
   />
 </template>
 
-<script setup name="ExamRule">
+<script setup name="ExamRuleList">
 import { page, del } from '@/api/course/exam-rule'
 import { parseTime } from '@/utils/ruoyi'
 

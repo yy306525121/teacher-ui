@@ -23,7 +23,8 @@
             icon="Plus"
             v-hasPermi="['course:feeRule:add']"
             @click="handleAdd"
-        >添加规则</el-button>
+        >添加规则
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -33,7 +34,8 @@
             :disabled="multiple"
             @click="handleDelete"
             v-hasPermi="['course:feeRule:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
     </el-row>
 
@@ -43,6 +45,9 @@
       </el-tab-pane>
       <el-tab-pane label="考试规则" name="exam">
         <ExamRuleList ref="examRuleListRef" :search-date="queryParams.date" @clickEdit="handleEdit"/>
+      </el-tab-pane>
+      <el-tab-pane label="临时调课规则" name="transfer">
+        <TransferRuleList ref="transferRuleListRef" :search-date="queryParams.date" @clickEdit="handleEdit"/>
       </el-tab-pane>
     </el-tabs>
 
@@ -55,6 +60,7 @@
 import { parseTime } from '@/utils/ruoyi'
 import HolidayRuleList from './component/HolidayRuleList.vue'
 import ExamRuleList from './component/ExamRuleList.vue'
+import TransferRuleList from './component/TransferRuleList.vue'
 import HolidayRuleForm from './form/HolidayRuleForm.vue'
 import ExamRuleForm from './form/ExamRuleForm.vue'
 
@@ -64,6 +70,7 @@ const ids = ref([]);
 const multiple = ref(true);
 const holidayRuleListRef = ref(null)
 const examRuleListRef = ref(null)
+const transferRuleListRef = ref(null)
 const holidayRuleFormRef = ref(null)
 const examRuleFormRef = ref(null)
 
@@ -72,14 +79,15 @@ const queryParams = ref({
   date: parseTime(new Date(), '{y}-{m}-{d}')
 })
 const queryRules = reactive({
-  date: [{required: true, message: '课时月份不能为空', trigger: 'blur'}]
+  date: [{ required: true, message: '课时月份不能为空', trigger: 'blur' }]
 })
 
 function handleQuery() {
   queryRef.value.validate(valid => {
     if (valid) {
-        holidayRuleListRef.value.getPage()
-        examRuleListRef.value.getPage()
+      holidayRuleListRef.value.getPage()
+      examRuleListRef.value.getPage()
+      transferRuleListRef.value.getPage()
     }
   })
 }
