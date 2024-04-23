@@ -53,6 +53,7 @@
 
     <HolidayRuleForm ref="holidayRuleFormRef" @ok="formOk"/>
     <ExamRuleForm ref="examRuleFormRef" @ok="formOk"/>
+    <TransferRuleForm ref="transferRuleFormRef" @ok="formOk"/>
   </div>
 </template>
 
@@ -63,6 +64,7 @@ import ExamRuleList from './component/ExamRuleList.vue'
 import TransferRuleList from './component/TransferRuleList.vue'
 import HolidayRuleForm from './form/HolidayRuleForm.vue'
 import ExamRuleForm from './form/ExamRuleForm.vue'
+import TransferRuleForm from './form/TransferRuleForm.vue'
 
 const tabType = ref('holiday')
 const queryRef = ref()
@@ -73,6 +75,7 @@ const examRuleListRef = ref(null)
 const transferRuleListRef = ref(null)
 const holidayRuleFormRef = ref(null)
 const examRuleFormRef = ref(null)
+const transferRuleFormRef = ref(null)
 
 
 const queryParams = ref({
@@ -97,6 +100,8 @@ function handleAdd() {
     holidayRuleFormRef.value.open()
   } else if (tabType.value === 'exam') {
     examRuleFormRef.value.open()
+  } else if (tabType.value === 'transfer') {
+    transferRuleFormRef.value.open()
   }
 }
 
@@ -105,6 +110,8 @@ function handleEdit(id) {
     holidayRuleFormRef.value.open(id)
   } else if (tabType.value === 'exam') {
     examRuleFormRef.value.open(id)
+  } else if (tabType.value === 'transfer') {
+    transferRuleFormRef.value.open(id)
   }
 }
 
@@ -122,6 +129,8 @@ function formOk() {
     holidayRuleListRef.value.getPage()
   } else if (tabType.value === 'exam') {
     examRuleListRef.value.getPage()
+  } else if (tabType.value === 'transfer') {
+    transferRuleListRef.value.getPage()
   }
 }
 

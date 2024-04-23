@@ -1,28 +1,32 @@
 <template>
   <el-table v-loading="loading" :data="ruleList" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" align="center" />
-    <el-table-column label="班级" align="center">
+    <el-table-column label="调课日期" align="center" prop="overrideDate" width="180">
       <template #default="scope">
-        <el-tag type="success" v-for="classInfo in scope.row.classInfoList">{{classInfo.name}}</el-tag>
+        <span>{{ parseTime(scope.row.overrideDate, '{y}-{m}-{d}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="开始日期" align="center" prop="startDate"/>
-    <el-table-column label="开始节次" align="center">
+    <el-table-column label="调课日期" align="center" prop="overrideTimeSlot" width="180">
       <template #default="scope">
-        {{scope.row.startTimeSlot.sortInDay}}
+        <span>{{ scope.row.overrideTimeSlot.sortInDay }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="结束日期" align="center" prop="endDate"/>
-    <el-table-column label="结束节次" align="center" prop="endSortInDay">
+    <el-table-column label="教师" align="center">
       <template #default="scope">
-        {{scope.row.endTimeSlot.sortInDay}}
+        <span>{{ scope.row.overrideFromTeacher.name }} -> {{ scope.row.overrideToTeacher.name }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+    <el-table-column label="课程" align="center">
       <template #default="scope">
-        <span>{{ parseTime(scope.row.createTime) }}</span>
+        <span>{{ scope.row.overrideFromSubject.name }} -> {{ scope.row.overrideToSubject.name }}</span>
       </template>
     </el-table-column>
+    <el-table-column label="课程类型" align="center">
+      <template #default="scope">
+        <span>{{ scope.row.overrideFromCourseType.name }} -> {{ scope.row.overrideToCourseType.name }}</span>
+      </template>
+    </el-table-column>
+
     <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
       <template #default="scope">
         <el-button link type="primary" icon="Edit" @click="handleEdit(scope.row)" v-hasPermi="['course:teacher:edit']">修改</el-button>
