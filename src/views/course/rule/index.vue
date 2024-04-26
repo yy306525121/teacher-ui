@@ -49,11 +49,15 @@
       <el-tab-pane label="临时调课规则" name="transfer">
         <TransferRuleList ref="transferRuleListRef" :search-date="queryParams.date" @clickEdit="handleEdit"/>
       </el-tab-pane>
+      <el-tab-pane label="补课" name="fill">
+        <FillRuleList ref="fillRuleListRef" :search-date="queryParams.date" @clickEdit="handleEdit"/>
+      </el-tab-pane>
     </el-tabs>
 
     <HolidayRuleForm ref="holidayRuleFormRef" @ok="formOk"/>
     <ExamRuleForm ref="examRuleFormRef" @ok="formOk"/>
     <TransferRuleForm ref="transferRuleFormRef" @ok="formOk"/>
+    <FillRuleForm ref="fillRuleFormRef" @ok="formOk"/>
   </div>
 </template>
 
@@ -62,9 +66,11 @@ import { parseTime } from '@/utils/ruoyi'
 import HolidayRuleList from './component/HolidayRuleList.vue'
 import ExamRuleList from './component/ExamRuleList.vue'
 import TransferRuleList from './component/TransferRuleList.vue'
+import FillRuleList from './component/FillRuleList.vue'
 import HolidayRuleForm from './form/HolidayRuleForm.vue'
 import ExamRuleForm from './form/ExamRuleForm.vue'
 import TransferRuleForm from './form/TransferRuleForm.vue'
+import FillRuleForm from './form/FillRuleForm.vue'
 
 const tabType = ref('holiday')
 const queryRef = ref()
@@ -73,9 +79,11 @@ const multiple = ref(true);
 const holidayRuleListRef = ref(null)
 const examRuleListRef = ref(null)
 const transferRuleListRef = ref(null)
+const fillRuleListRef = ref(null)
 const holidayRuleFormRef = ref(null)
 const examRuleFormRef = ref(null)
 const transferRuleFormRef = ref(null)
+const fillRuleFormRef = ref(null)
 
 
 const queryParams = ref({
@@ -91,6 +99,7 @@ function handleQuery() {
       holidayRuleListRef.value.getPage()
       examRuleListRef.value.getPage()
       transferRuleListRef.value.getPage()
+      fillRuleListRef.value.getPage()
     }
   })
 }
@@ -102,6 +111,8 @@ function handleAdd() {
     examRuleFormRef.value.open()
   } else if (tabType.value === 'transfer') {
     transferRuleFormRef.value.open()
+  } else if (tabType.value === 'fill') {
+    transferRuleFormRef.value.open()
   }
 }
 
@@ -112,6 +123,8 @@ function handleEdit(id) {
     examRuleFormRef.value.open(id)
   } else if (tabType.value === 'transfer') {
     transferRuleFormRef.value.open(id)
+  } else if (tabType.value === 'fill') {
+    fillRuleFormRef.value.open(id)
   }
 }
 
@@ -131,6 +144,8 @@ function formOk() {
     examRuleListRef.value.getPage()
   } else if (tabType.value === 'transfer') {
     transferRuleListRef.value.getPage()
+  } else if (tabType.value === 'fill') {
+    fillRuleListRef.value.getPage()
   }
 }
 

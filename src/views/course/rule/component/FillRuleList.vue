@@ -1,32 +1,19 @@
 <template>
   <el-table v-loading="loading" :data="ruleList" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" align="center" />
-    <el-table-column label="调课日期" align="center" prop="overrideDate" width="180">
+    <el-table-column label="班级" align="center">
       <template #default="scope">
-        <span>{{ parseTime(scope.row.overrideDate, '{y}-{m}-{d}') }}</span>
+        <el-tag type="success" v-for="classInfo in scope.row.classInfoList">{{classInfo.name}}</el-tag>
       </template>
     </el-table-column>
-    <el-table-column label="调课节次" align="center" prop="overrideTimeSlot" width="180">
-      <template #default="scope">
-        <span>{{ scope.row.overrideTimeSlot.sortInDay }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="教师" align="center">
-      <template #default="scope">
-        <span>{{ scope.row.overrideFromTeacher.name }} -> {{ scope.row.overrideToTeacher.name }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="课程" align="center">
-      <template #default="scope">
-        <span>{{ scope.row.overrideFromSubject?.name }} -> {{ scope.row.overrideToSubject?.name }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="课程类型" align="center">
-      <template #default="scope">
-        <span>{{ scope.row.overrideFromCourseType?.name }} -> {{ scope.row.overrideToCourseType?.name }}</span>
-      </template>
-    </el-table-column>
+    <el-table-column label="日期" align="center" prop="date"/>
+    <el-table-column label="补周几课" align="center" prop="week"/>
 
+    <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <template #default="scope">
+        <span>{{ parseTime(scope.row.createTime) }}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="操作" width="180" align="center" class-name="small-padding fixed-width">
       <template #default="scope">
         <el-button link type="primary" icon="Edit" @click="handleEdit(scope.row)" v-hasPermi="['course:teacher:edit']">修改</el-button>
@@ -44,8 +31,8 @@
   />
 </template>
 
-<script setup name="TransferRuleList">
-import { page, del } from '@/api/course/transfer-rule'
+<script setup name="FillRuleList">
+import { page, del } from '@/api/course/fill-rule'
 import { parseTime } from '@/utils/ruoyi'
 
 const { proxy } = getCurrentInstance();
