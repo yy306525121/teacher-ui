@@ -101,6 +101,27 @@
           </el-form-item>
         </el-col>
       </el-row>
+
+
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="调课课程类型">
+            <el-select v-model="form.fromCourseTypeId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in courseTypeList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="1" class="transfer-icon">
+          <el-icon><ArrowRight /></el-icon>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label-width="0">
+            <el-select v-model="form.toCourseTypeId" placeholder="请选择" clearable filterable>
+              <el-option v-for="item in courseTypeList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
     <template #footer>
@@ -118,6 +139,7 @@ import { change as changeCoursePlan } from '@/api/course/plan'
 import { tree } from "@/api/course/class";
 import {list as listSubject} from "@/api/course/subject";
 import {list as listTimeSlot} from "@/api/course/timeSlot";
+import {list as listCourseType} from "@/api/course/course-type";
 
 const { proxy } = getCurrentInstance();
 const emit = defineEmits(["ok"]);
@@ -146,7 +168,9 @@ const data = reactive({
     fromTeacherId: undefined,
     toTeacherId: undefined,
     fromSubjectId: undefined,
-    toSubjectId: undefined
+    toSubjectId: undefined,
+    fromCourseTypeId: undefined,
+    toCourseTypeId: undefined
   },
   rules: {
     type: [{ required: true, message: "规则类型", trigger: "blur" }]
@@ -160,6 +184,7 @@ function show() {
   getAllSubject()
   getTimeSlotList()
   getGradeTree()
+  getAllCourseType()
   open.value = true
 }
 
@@ -187,6 +212,12 @@ function getTimeSlotList() {
 function getGradeTree() {
   tree().then(response => {
     gradeList.value = response.data
+  })
+}
+
+function getAllCourseType() {
+  listCourseType().then(rsp => {
+    courseTypeList.value = rsp.data
   })
 }
 
@@ -219,7 +250,9 @@ function reset() {
     fromTeacherId: undefined,
     toTeacherId: undefined,
     fromSubjectId: undefined,
-    toSubjectId: undefined
+    toSubjectId: undefined,
+    fromCourseTypeId: undefined,
+    toCourseTypeId: undefined
   }
   proxy.resetForm('changePlanRef')
 }

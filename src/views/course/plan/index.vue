@@ -4,6 +4,7 @@ import { list as listTeacher } from '@/api/course/teacher'
 import { tree } from "@/api/course/class";
 import PlanImport from './import.vue'
 import ChangePlan from './form.vue'
+import {parseTime} from "@/utils/ruoyi";
 
 const {proxy} = getCurrentInstance();
 const {plan_query_type} = proxy.useDict("plan_query_type");
@@ -29,7 +30,8 @@ const props = {
 const data = reactive({
   queryParams: {
     queryType: '1',
-    classInfoId: undefined
+    classInfoId: undefined,
+    date: parseTime(new Date(), '{y}-{m}-{d}'),
   }
 })
 const {queryParams} = toRefs(data);
@@ -183,6 +185,14 @@ resetCoursePlanList()
         <el-select v-model="queryParams.teacherId" placeholder="请选择" clearable style="width: 200px" filterable>
           <el-option v-for="item in teacherList" :key="item.id" :label="item.name" :value="item.id"/>
         </el-select>
+      </el-form-item>
+      <el-form-item label="日期" prop="date">
+        <el-date-picker
+            v-model="queryParams.date"
+            type="date"
+            placeholder="请选择日期"
+            value-format="YYYY-MM-DD"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
